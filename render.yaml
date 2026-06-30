@@ -7,7 +7,9 @@ services:
     runtime: node
     rootDir: backend
     plan: free
-    buildCommand: npm install && npm run build && npm run prisma:deploy
+    # --include=dev: NODE_ENV=production hace que npm omita las devDependencies
+    # (typescript, @types/*, prisma, tsx). El build las necesita SI o SI.
+    buildCommand: npm install --include=dev && npm run build && npm run prisma:deploy
     startCommand: npm start
     healthCheckPath: /api/health
     envVars:
