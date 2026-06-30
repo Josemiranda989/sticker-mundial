@@ -1,0 +1,73 @@
+// Schema del album de stickers del Mundial.
+//
+// Modelo central: un catalogo de figuritas (Sticker) agrupadas por
+// seleccion (Team), y el estado de coleccion de cada perfil (User)
+// representado en UserSticker.count:
+//   count = 0  -> te FALTA
+//   count = 1  -> la TENES
+//   count >= 2 -> tenes REPETIDAS (count - 1 para intercambiar)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum StickerType {
+  PLAYER // foto de jugador
+  BADGE // escudo de la seleccion
+  SPECIAL // estadios, mascota, trofeo
+  LEGEND // leyendas / especiales doradas
+}
+
+enum Rarity {
+  NORMAL
+  FOIL // brillante / premium
+}
+
+model Team {
+  id        String    @id @default(cuid())
+  name      String
+  code      String    @unique // ej. "ARG"
+  group     String // "A".."H"
+  flagUrl   String?
+  stickers  Sticker[]
+  createdAt DateTime  @default(now())
+}
+
+model Sticker {
+  id           String        @id @default(cuid())
+  number       String        @unique // ej. "ARG 5"
+  name         String // ej. "L. Messi"
+  type         StickerType   @default(PLAYER)
+  rarity       Rarity        @default(NORMAL)
+  imageUrl     String?
+  team         Team?         @relation(fields: [teamId], references: [id])
+  teamId       String?
+  userStickers UserSticker[]
+  createdAt    DateTime      @default(now())
+}
+
+model User {
+  id        String        @id @default(cuid())
+  name      String
+  stickers  UserSticker[]
+  createdAt DateTime      @default(now())
+}
+
+model UserSticker {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  sticker   Sticker  @relation(fields: [stickerId], references: [id], onDelete: Cascade)
+  stickerId String
+  count     Int      @default(0)
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, stickerId])
+  @@index([userId])
+}

@@ -1,0 +1,1 @@
+{"root":["./src/app.tsx","./src/main.tsx","./src/vite-env.d.ts","./src/api/client.ts","./src/api/hooks.ts","./src/api/types.ts","./src/components/albumgrid.tsx","./src/components/profilegate.tsx","./src/components/scorebar.tsx","./src/components/stickercard.tsx","./src/lib/profile.ts","./src/pages/albumpage.tsx","./src/pages/progresspage.tsx"],"errors":true,"version":"5.9.3"}

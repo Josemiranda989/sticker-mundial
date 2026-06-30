@@ -1,0 +1,642 @@
+/* ============================================================
+   Album Foil — sistema de diseno
+   Sujeto: el mundo de la figurita (sobre plateado, brillo foil,
+   huecos fantasma). El foil solo "se enciende" cuando la tenes.
+   ============================================================ */
+
+:root {
+  --ink: #0b1020;
+  --ink-2: #0e1428;
+  --panel: #161c30;
+  --panel-2: #1e2640;
+  --line: #2a3354;
+  --chalk: #f2f4f8;
+  --muted: #8893b5;
+  --ghost: #39426b;
+  --gold: #f5c451;
+
+  /* degrade holografico — la signature */
+  --foil: linear-gradient(
+    115deg,
+    #c961ff 0%,
+    #6a8cff 28%,
+    #34e7e4 52%,
+    #5cf2a3 70%,
+    #f5c451 100%
+  );
+
+  --radius: 14px;
+  --radius-sm: 8px;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+
+  --font-display: 'Anton', system-ui, sans-serif;
+  --font-body: 'Manrope', system-ui, sans-serif;
+  --font-data: 'Space Mono', ui-monospace, monospace;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--ink);
+  background-image: radial-gradient(
+    1200px 600px at 50% -10%,
+    #1a2348 0%,
+    transparent 60%
+  );
+  background-attachment: fixed;
+  color: var(--chalk);
+  min-height: 100vh;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+/* ---------- App shell ---------- */
+.app {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 24px 20px 80px;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding-bottom: 22px;
+  border-bottom: 1px solid var(--line);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand__mark {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: var(--foil);
+  background-size: 200% 200%;
+  animation: shimmer 6s ease infinite;
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+}
+
+.brand__name {
+  font-family: var(--font-display);
+  font-size: 26px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.brand__name small {
+  display: block;
+  font-family: var(--font-data);
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  color: var(--muted);
+}
+
+/* ---------- Nav ---------- */
+.nav {
+  display: flex;
+  gap: 6px;
+  background: var(--panel);
+  padding: 5px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+}
+
+.nav a {
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--muted);
+  transition: color 0.18s ease;
+}
+
+.nav a:hover {
+  color: var(--chalk);
+}
+
+.nav a.is-active {
+  background: var(--chalk);
+  color: var(--ink);
+}
+
+/* ---------- Scorebar (progreso = marcador) ---------- */
+.scorebar {
+  margin: 26px 0 8px;
+  background: linear-gradient(180deg, var(--panel-2), var(--panel));
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 20px 22px;
+  box-shadow: var(--shadow);
+}
+
+.scorebar__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.scorebar__pct {
+  font-family: var(--font-display);
+  font-size: 52px;
+  line-height: 0.9;
+  letter-spacing: 0.02em;
+  background: var(--foil);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 6s ease infinite;
+}
+
+.scorebar__count {
+  font-family: var(--font-data);
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.scorebar__count b {
+  color: var(--chalk);
+}
+
+.bar {
+  margin-top: 14px;
+  height: 12px;
+  border-radius: 999px;
+  background: var(--ink);
+  border: 1px solid var(--line);
+  overflow: hidden;
+}
+
+.bar__fill {
+  height: 100%;
+  background: var(--foil);
+  background-size: 200% 200%;
+  animation: shimmer 6s ease infinite;
+  transition: width 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.scorebar__stats {
+  display: flex;
+  gap: 22px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat__num {
+  font-family: var(--font-display);
+  font-size: 22px;
+}
+
+.stat__label {
+  font-family: var(--font-data);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ---------- Group band ---------- */
+.band {
+  margin-top: 34px;
+}
+
+.band__title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-display);
+  font-size: 20px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.band__title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+
+.band__chip {
+  font-family: var(--font-data);
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+}
+
+/* ---------- Grid ---------- */
+.grid {
+  margin-top: 16px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
+  gap: 12px;
+}
+
+/* ---------- Sticker card ---------- */
+.sticker {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line);
+  background: var(--panel);
+  padding: 12px 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  transition: transform 0.18s ease, border-color 0.18s ease;
+  text-align: left;
+  width: 100%;
+}
+
+.sticker:hover {
+  transform: translateY(-3px);
+  border-color: var(--ghost);
+}
+
+.sticker:focus-visible {
+  outline: 2px solid #6a8cff;
+  outline-offset: 2px;
+}
+
+/* la figurita que TENES: el foil se enciende */
+.sticker.is-owned {
+  border-color: transparent;
+  background:
+    linear-gradient(var(--panel), var(--panel)) padding-box,
+    var(--foil) border-box;
+  border: 1.5px solid transparent;
+}
+
+.sticker.is-owned::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--foil);
+  background-size: 200% 200%;
+  opacity: 0.12;
+  animation: shimmer 6s ease infinite;
+  pointer-events: none;
+}
+
+/* la que te FALTA: silueta fantasma */
+.sticker.is-missing {
+  background: repeating-linear-gradient(
+    45deg,
+    var(--ink-2),
+    var(--ink-2) 8px,
+    var(--panel) 8px,
+    var(--panel) 16px
+  );
+  border-style: dashed;
+  border-color: var(--ghost);
+}
+
+.sticker.is-missing .sticker__name,
+.sticker.is-missing .sticker__flag {
+  opacity: 0.35;
+  filter: grayscale(1);
+}
+
+.sticker__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sticker__num {
+  font-family: var(--font-data);
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.02em;
+}
+
+.sticker__flag {
+  width: 22px;
+  height: 16px;
+  object-fit: cover;
+  border-radius: 2px;
+  border: 1px solid var(--line);
+}
+
+.sticker__body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sticker__name {
+  font-family: var(--font-display);
+  font-size: 16px;
+  line-height: 1.05;
+  letter-spacing: 0.01em;
+}
+
+.sticker__type {
+  font-family: var(--font-data);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.sticker__foilbadge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-size: 11px;
+}
+
+/* repetidas */
+.sticker__dupes {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  font-family: var(--font-data);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink);
+  background: var(--gold);
+  border-radius: 999px;
+  padding: 1px 7px;
+}
+
+.sticker__footer {
+  margin-top: 8px;
+}
+
+.btn--card {
+  width: 100%;
+  padding: 7px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 6px;
+  border: 1px solid var(--ghost);
+  background: var(--panel-2);
+  color: var(--chalk);
+}
+
+.btn--card:hover {
+  border-color: var(--chalk);
+}
+
+.stepper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.stepper__btn {
+  width: 30px;
+  height: 28px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: var(--ink);
+  color: var(--chalk);
+  font-size: 18px;
+  line-height: 1;
+  display: grid;
+  place-items: center;
+}
+
+.stepper__btn:hover {
+  border-color: var(--chalk);
+}
+
+.stepper__btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.stepper__count {
+  font-family: var(--font-data);
+  font-weight: 700;
+  font-size: 15px;
+}
+
+/* ---------- Profile gate ---------- */
+.gate {
+  max-width: 420px;
+  margin: 12vh auto 0;
+  text-align: center;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 36px 28px;
+  box-shadow: var(--shadow);
+}
+
+.gate h1 {
+  font-family: var(--font-display);
+  font-size: 30px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 6px;
+}
+
+.gate p {
+  color: var(--muted);
+  margin-bottom: 22px;
+}
+
+.field {
+  display: flex;
+  gap: 8px;
+}
+
+input.text {
+  flex: 1;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line);
+  background: var(--ink);
+  color: var(--chalk);
+  font-family: inherit;
+  font-size: 15px;
+}
+
+input.text:focus-visible {
+  outline: 2px solid #6a8cff;
+  outline-offset: 1px;
+}
+
+.btn {
+  padding: 12px 18px;
+  border-radius: var(--radius-sm);
+  border: none;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--ink);
+  background: var(--chalk);
+  transition: transform 0.12s ease, opacity 0.18s ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn--foil {
+  color: var(--ink);
+  background: var(--foil);
+  background-size: 200% 200%;
+  animation: shimmer 6s ease infinite;
+}
+
+/* ---------- Sticker actions (detalle inline) ---------- */
+.actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.actions .btn {
+  padding: 8px 12px;
+  font-size: 12px;
+  background: var(--panel-2);
+  color: var(--chalk);
+  border: 1px solid var(--line);
+}
+
+.actions .btn.is-active {
+  background: var(--chalk);
+  color: var(--ink);
+  border-color: var(--chalk);
+}
+
+/* ---------- Tag lists (faltantes / repetidas) ---------- */
+.taglist {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.tag--dupe {
+  border-color: var(--gold);
+}
+
+.tag__num {
+  font-family: var(--font-data);
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.tag__x {
+  font-family: var(--font-data);
+  font-weight: 700;
+  color: var(--gold);
+}
+
+/* ---------- Misc ---------- */
+.state {
+  text-align: center;
+  color: var(--muted);
+  padding: 60px 0;
+  font-family: var(--font-data);
+}
+
+.profilebar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.profilebar b {
+  color: var(--chalk);
+}
+
+.linkbtn {
+  background: none;
+  border: none;
+  color: var(--muted);
+  text-decoration: underline;
+  font-size: 12px;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .brand__name {
+    font-size: 22px;
+  }
+  .scorebar__pct {
+    font-size: 40px;
+  }
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(108px, 1fr));
+  }
+}

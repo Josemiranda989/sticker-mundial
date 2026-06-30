@@ -1,0 +1,21 @@
+# Blueprint de Render para el backend.
+# En Render: New + -> Blueprint -> apuntar a este repo.
+# El root del servicio es la carpeta backend/.
+services:
+  - type: web
+    name: sticker-mundial-api
+    runtime: node
+    rootDir: backend
+    plan: free
+    buildCommand: npm install && npm run build && npm run prisma:deploy
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: DATABASE_URL
+        sync: false # se carga manual en el dashboard (secreto)
+      - key: DIRECT_URL
+        sync: false
+      - key: FRONTEND_URL
+        sync: false
+      - key: NODE_ENV
+        value: production
