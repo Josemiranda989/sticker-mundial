@@ -93,7 +93,7 @@ Orden recomendado: **Supabase → Render → Vercel** (cada uno necesita datos d
 
 1. Subir el repo a GitHub.
 2. En [render.com](https://render.com): **New → Blueprint** apuntando al repo
-   (usa `backend/render.yaml`), o **New → Web Service** manual con:
+   (usa el `render.yaml` de la raiz), o **New → Web Service** manual con:
    - Root Directory: `backend`
    - Build: `npm install && npm run build && npm run prisma:deploy`
    - Start: `npm start`

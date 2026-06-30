@@ -1,6 +1,6 @@
-# Blueprint de Render para el backend.
-# En Render: New + -> Blueprint -> apuntar a este repo.
-# El root del servicio es la carpeta backend/.
+# Blueprint de Render (debe vivir en la RAIZ del repo).
+# En Render: New + -> Blueprint -> seleccionar este repo.
+# El campo rootDir le dice a Render que el servicio vive en backend/.
 services:
   - type: web
     name: sticker-mundial-api
@@ -16,6 +16,6 @@ services:
       - key: DIRECT_URL
         sync: false
       - key: FRONTEND_URL
-        sync: false
+        sync: false # la URL de Vercel; se completa despues de deployar el front
       - key: NODE_ENV
         value: production
